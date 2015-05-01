@@ -4,7 +4,7 @@
 DEFINE('DB_SERVER', "localhost");
 
 //database login name
-DEFINE('DB_USER', "millionenshow");
+DEFINE('DB_USER', "admin");
 //database login password
 DEFINE('DB_PASS', "mydockermillionenshow");
 
