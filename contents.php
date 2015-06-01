@@ -1,4 +1,28 @@
 <?php
+
+/*
+   * Millionenshow - Contents
+   * 2015, Weber Manuel
+   *
+   *  This program is free software: you can redistribute it and/or modify
+   *  it under the terms of the GNU General Public License as published by
+   *  the Free Software Foundation, either version 3 of the License, or
+   *  (at your option) any later version.
+   *
+   *  This program is distributed in the hope that it will be useful,
+   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   *  GNU General Public License for more details.
+   *
+   *  You should have received a copy of the GNU General Public License
+   *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+   * 
+*/
+
+/*  Die Daten werden per AJAX von dieser Datei "geladen". Über den ACTION-Parameter wird
+*   ein Funktionsname übergeben, der dann eine Funktion der Klasse Contents aufruft
+*/
+
 session_start();
 require_once ("init.php");
 
@@ -7,11 +31,12 @@ if (isset($_POST['action']))
 
 	$content = new Contents();
 	switch($_POST['action']) {
+		//Alle Benutzer anzeigen
 		case 'viewallusers':
 			$users = $content->getUsers();
 			echo $content->displayTableUsers($users);
 			break;	
-		
+		//Alle Fragen anzeigen
 		case 'viewadminquestions':	
 
 			if($content->isAdmin()){
@@ -22,20 +47,21 @@ if (isset($_POST['action']))
 				echo "Sie haben keine Berechtigungen zum Ausführen dieses Bereiches!";
 			}
 			break;
+		//Alle Quiz anzeigen
 		case 'viewquizes':	
 			$quizes = $content->getQuizes();
 			echo $content->displayTableQuizes($quizes);
 			break;
-			
+		//Neuanlage für Quiz anzeigen	
 		case 'createquiz':
 			$meldung = $content->createQuiz($_POST['quizID']);
 			echo $meldung;
 			break;
-			
+		//Einzelnes Quiz anzeigen
 		case 'showquiz':
 			echo $content->showQuiz();
 			break;
-			
+		//Prüft ob die gewählte Antwort richtig ist
 		case 'isrightanswer':
 			if(isset($_POST['antwort_id'])){
 				echo $content->checkAnswer($_POST['antwort_id'],$_POST['frage_nr']);
@@ -44,7 +70,7 @@ if (isset($_POST['action']))
 				echo "0";
 			}
 			break;
-			
+		//Einsatz eines Jokers durchführen
 		case 'usejoker':
 			if(isset($_POST['frage_nr'])){
 				echo $content->useJoker($_POST['frage_nr']);
@@ -54,6 +80,7 @@ if (isset($_POST['action']))
 			}
 			
 			break;
+		//Prüft ob gerade ein Quiz für den Benutzer läuft
 		case 'isactivequiz':
 			$meldung = $content->isActiveQuiz();
 			if($meldung=="OK"){
@@ -64,13 +91,13 @@ if (isset($_POST['action']))
 				echo $content->displayTableQuizes($quizes);
 			}
 			break;
-			
+		//Quiz beenden
 		case 'quizbeenden':
 			$content->quizBeenden();
 			$quizes = $content->getQuizes();
 			echo $content->displayTableQuizes($quizes);
 			break;
-			
+		//Menü für Administratoren anzeigen
 		case 'viewadministratorlinks':
 			if($content->isAdmin()){
 				echo $content->viewAdministratorLinks();
@@ -84,7 +111,7 @@ if (isset($_POST['action']))
 			}
 			break;
 			
-		
+		//Benutzer anzeigen 
 		case 'viewadminusers':
 			if($content->isAdmin()){
 				$users = $content->getUsers();
@@ -94,7 +121,7 @@ if (isset($_POST['action']))
 				echo "<div id='error'>Sie haben keine Berechtigungen zum Ausführen dieses Bereiches!</div>";
 			}
 			break;
-			
+		//Benutzer löschen
 		case 'deleteuser':
 			
 			if($content->isAdmin()){
@@ -106,7 +133,7 @@ if (isset($_POST['action']))
 				echo "Sie haben keine Berechtigungen zum Ausführen dieses Bereiches!";
 			}
 			break;
-		
+		//Benutzer editieren
 		case 'edituser':
 			if($content->isAdmin()){
 				if ($_POST['userId']) {
@@ -131,7 +158,7 @@ if (isset($_POST['action']))
 				echo "Sie haben keine Berechtigungen zum Ausführen dieses Bereiches!";
 			}			
 			break;
-			
+		//Benutzer anlegen	
 		case 'newuser':
 			if($content->isAdmin()){
 				echo $content->viewNewUserForm();
@@ -155,7 +182,7 @@ if (isset($_POST['action']))
 			break;
 			
 		//---------------------
-			
+		//Quizübersicht in der Adminoberfläche
 		case 'viewadminquizes':
 			if($content->isAdmin()){
 				$quizes = $content->getAllQuizes();
@@ -165,7 +192,7 @@ if (isset($_POST['action']))
 				echo "<div id='error'>Sie haben keine Berechtigungen zum Ausführen dieses Bereiches!</div>";
 			}
 			break;
-			
+		//Quiz löschen
 		case 'deletequiz':
 			
 			if($content->isAdmin()){
@@ -177,7 +204,7 @@ if (isset($_POST['action']))
 				echo "Sie haben keine Berechtigungen zum Ausführen dieses Bereiches!";
 			}
 			break;
-		
+		//Frage löschen
 		case 'deletequestion':
 			
 			if($content->isAdmin()){
@@ -189,7 +216,7 @@ if (isset($_POST['action']))
 				echo "Sie haben keine Berechtigungen zum Ausführen dieses Bereiches!";
 			}
 			break;
-		
+		//Quiz editieren
 		case 'editquiz':
 			if($content->isAdmin()){
 				if ($_POST['quizId']) {
@@ -214,7 +241,7 @@ if (isset($_POST['action']))
 				echo "Sie haben keine Berechtigungen zum Ausführen dieses Bereiches!";
 			}			
 			break;
-		
+		//Frage editieren
 		case 'editquestion':
 			if($content->isAdmin()){
 				if ($_POST['quizId'] && $_POST['frageNr']) {
@@ -239,7 +266,7 @@ if (isset($_POST['action']))
 				echo "Sie haben keine Berechtigungen zum Ausführen dieses Bereiches!";
 			}			
 			break;
-		
+		//Quiz anlegen
 		case 'newquiz':
 			if($content->isAdmin()){
 				echo $content->viewNewQuizForm();
@@ -261,6 +288,7 @@ if (isset($_POST['action']))
 				echo "Sie haben keine Berechtigungen zum Ausführen dieses Bereiches!";
 			}			
 			break;
+		//Frage anlegen
 		case 'newquestion':
 			if($content->isAdmin()){
 				if ($_POST['quizId']) {

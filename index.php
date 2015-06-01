@@ -1,5 +1,24 @@
 <?php
 
+/*
+   * Millionenshow - Startseite
+   * 2015, Weber Manuel
+   *
+   *  This program is free software: you can redistribute it and/or modify
+   *  it under the terms of the GNU General Public License as published by
+   *  the Free Software Foundation, either version 3 of the License, or
+   *  (at your option) any later version.
+   *
+   *  This program is distributed in the hope that it will be useful,
+   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   *  GNU General Public License for more details.
+   *
+   *  You should have received a copy of the GNU General Public License
+   *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+   * 
+*/
+
 error_reporting(E_ALL ^ E_NOTICE);
 
 session_id();
@@ -45,6 +64,8 @@ else
 	var wait = 1000;
 	var quizWait = 1000;
 	var waitNext = 500;
+	
+	//Diese Funktion führt den mitgegebenen String als Funktion aus
 	function executeFunctionByName(functionName, context, arguments) {
 		
 		var args = Array.prototype.slice.call(arguments).splice(1, arguments.length);
@@ -57,14 +78,14 @@ else
 		}
 		return context[func].apply(this, args);
 	}
-
+	//Diese Funktion setzt die "MessageBox" auf Standard zurück (Farbe und Text)
 	function dialogSetStandard(){
 		$("#dialogbuttons").html('<input type="image" id="okdialog" name="okdialog" value="Cancel" src="images/cancel.png">');
 		aktCallbackFunction = "";
 		$("#dialog").css({'border-color': 'red'});
 	}
 	
-	
+	//Diese Funktion zeigt den div "dialog" in Form eines Modalen Dialoges an
 	function showdialog(text,callbackFunction,color){
 		aktCallbackFunction = callbackFunction;
 		$("#dialog").css({'border-color': color});
@@ -83,6 +104,7 @@ else
 	
 	$(document).ready(function() { 
 
+		//Beim Starten wird dem Administrator ein gesondertes Menü angezeigt
 		$.post("contents.php",{'action':'viewadministratorlinks'},function(data){
 			$("#navigation").html(data);	
 		});
@@ -92,7 +114,7 @@ else
 			return false;
 		});
 		
-		
+		//Klick auf Links abfangen und per AJAX inhalt laden
 		$(".all, .navigation").on("click","a.internal",function(){
 			var post_url = $(this).attr('href');
 			if (post_url.indexOf('http://') != -1) {
@@ -121,6 +143,8 @@ else
 		});
 		
 		dialogSetStandard();
+		
+		//Dialog Schließen, wenn auf OK geklickt wird
 		$("#okdialog").click( function(e) {
 			$("#background_dialog").hide();
 			$("#dialog").hide();
